@@ -25,9 +25,18 @@ Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" |
     Where-Object { $_.CommandLine -match 'blinker\.ps1' } |
     ForEach-Object { Stop-Process -Id $_.ProcessId -Force -Confirm:$false -ErrorAction SilentlyContinue }
 
+# Register via the ScheduledTasks cmdlets, not schtasks: we need to clear two
+# hostile defaults - "start only on AC power" (breaks laptops on battery) and
+# the 72h execution time limit (would kill the long-running tray app).
 $scriptPath = Join-Path $PSScriptRoot 'blinker.ps1'
-$tr = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File $scriptPath"
-schtasks /Create /TN "ClaudeCapsBlink" /TR $tr /SC ONLOGON /RL HIGHEST /F | Out-Null
+$action = New-ScheduledTaskAction -Execute 'powershell.exe' `
+    -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File $scriptPath"
+$trigger = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
+    -ExecutionTimeLimit ([TimeSpan]::Zero) -MultipleInstances IgnoreNew
+$principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -RunLevel Highest
+Register-ScheduledTask -TaskName 'ClaudeCapsBlink' -Action $action -Trigger $trigger `
+    -Settings $settings -Principal $principal -Force | Out-Null
 
 Remove-Item -Force $pause -ErrorAction SilentlyContinue
-schtasks /Run /TN "ClaudeCapsBlink" | Out-Null
+Start-ScheduledTask -TaskName 'ClaudeCapsBlink'
