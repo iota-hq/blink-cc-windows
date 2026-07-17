@@ -1,0 +1,3 @@
+# Compiled locally by install.ps1
+hook-state.exe
+*.pdb
