@@ -12,8 +12,8 @@ Requires Windows 10/11 and Claude Code. No downloads, no dependencies -
 everything uses components that ship with Windows.
 
 ```
-git clone https://github.com/bikash1376/claude-caps-blink
-cd claude-caps-blink
+git clone https://github.com/iota-hq/blink-cc-windows
+cd blink-cc-windows
 powershell -ExecutionPolicy Bypass -File install.ps1
 ```
 
