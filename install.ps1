@@ -84,6 +84,20 @@ if (Test-Path $skillSrc) {
     Write-Host 'Installed the /blink skill (tell Claude "turn the blinker off/on").'
 }
 
+# --- 2c. Start Menu shortcut so the app is searchable/startable like any app ---
+try {
+    $lnkPath = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Claude Caps Blink.lnk'
+    $shell = New-Object -ComObject WScript.Shell
+    $lnk = $shell.CreateShortcut($lnkPath)
+    $lnk.TargetPath = Join-Path $dir 'start-blink.cmd'
+    $lnk.WorkingDirectory = $dir
+    $lnk.WindowStyle = 7  # minimized: the cmd only fires the task and exits
+    $lnk.Description = 'Start the Caps Lock status light for Claude Code'
+    $lnk.IconLocation = '%SystemRoot%\System32\main.cpl,1'  # keyboard icon
+    $lnk.Save()
+    Write-Host 'Added "Claude Caps Blink" to the Start Menu.'
+} catch {}
+
 # --- 3. optional LED mode (one UAC prompt; skipped if already set up) ---
 schtasks /Query /TN "ClaudeCapsBlink" 2>$null | Out-Null
 if ($LASTEXITCODE -ne 0) {

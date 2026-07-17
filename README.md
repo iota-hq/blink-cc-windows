@@ -46,6 +46,7 @@ scheduled task starts it at logon. Preferences persist. Ways to control it:
 
 - **Tray menu** (right-click the dot behind the taskbar `^` chevron):
   enable/disable each of the three states, or **Exit**
+- **Start Menu**: press Win, type "blink", launch **Claude Caps Blink**
 - **`stop-blink.cmd` / `start-blink.cmd`**: manual off/on from Explorer
 - **Ask Claude**: the installer adds a `/blink` skill, so "turn the blinker
   off" in any Claude Code session works

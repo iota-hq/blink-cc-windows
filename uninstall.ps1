@@ -41,5 +41,7 @@ Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" |
     Where-Object { $_.CommandLine -match 'blinker\.ps1' } |
     ForEach-Object { Stop-Process -Id $_.ProcessId -Force -Confirm:$false }
 
+Remove-Item -Force (Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs\Claude Caps Blink.lnk')
+Remove-Item -Recurse -Force (Join-Path $env:USERPROFILE '.claude\skills\blink')
 Remove-Item -Recurse -Force $baseDir
 Write-Host 'claude-caps-blink uninstalled. You can delete this folder now.'
