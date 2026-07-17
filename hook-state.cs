@@ -47,7 +47,11 @@ static class HookState
                     File.WriteAllText(file, "done");
                     break;
                 case "attention":
-                    File.WriteAllText(file, "attention");
+                    // Only mark attention while a turn is actually in progress: the
+                    // "waiting for your input" idle notification fires after a turn
+                    // ends and must not re-arm the light.
+                    if (File.Exists(file) && File.ReadAllText(file).Trim() != "done")
+                        File.WriteAllText(file, "attention");
                     break;
                 case "working":
                     // Without -Launch (PostToolUse) only update an existing flag, so a

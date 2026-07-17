@@ -28,7 +28,13 @@ $file = Join-Path $flagDir "$sid.flag"
 switch ($State) {
     'end'  { Remove-Item -Force $file }
     'done' { Set-Content -Path $file -Value 'done' }
-    'attention' { Set-Content -Path $file -Value 'attention' }
+    'attention' {
+        # Only while a turn is in progress: the idle "waiting for your input"
+        # notification fires after a turn ends and must not re-arm the light
+        if ((Test-Path $file) -and ((Get-Content $file -TotalCount 1) -ne 'done')) {
+            Set-Content -Path $file -Value 'attention'
+        }
+    }
     'working' {
         if ($Launch) { Set-Content -Path $file -Value 'working' }
         elseif ((Test-Path $file) -and ((Get-Content $file -TotalCount 1) -ne 'done')) {
