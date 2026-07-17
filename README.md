@@ -30,6 +30,14 @@ The installer:
 Restart your Claude Code sessions (or run `/hooks` in them) to activate.
 Uninstall with `uninstall.ps1` - it removes only what install added.
 
+**Or let Claude install it for you** - paste this into any Claude Code session:
+
+> Install https://github.com/iota-hq/blink-cc-windows (clone it and run install.ps1)
+
+Once installed, no reference is ever needed again: the installer adds a
+`/blink` skill, so every Claude session on the machine knows how to start,
+stop, and configure the light.
+
 ## States
 
 | State | LED | Tray icon | Triggered by |
