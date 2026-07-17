@@ -75,6 +75,15 @@ foreach ($ev in $events) {
 [System.IO.File]::WriteAllText($settingsPath, ($settings | ConvertTo-Json -Depth 12))
 Write-Host "Hooks merged into $settingsPath"
 
+# --- 2b. install the /blink skill so any Claude session can control the app ---
+$skillSrc = Join-Path $dir '.claude\skills\blink\SKILL.md'
+if (Test-Path $skillSrc) {
+    $skillDst = Join-Path $env:USERPROFILE '.claude\skills\blink'
+    New-Item -ItemType Directory -Force -Path $skillDst | Out-Null
+    Copy-Item -Force $skillSrc $skillDst
+    Write-Host 'Installed the /blink skill (tell Claude "turn the blinker off/on").'
+}
+
 # --- 3. optional LED mode (one UAC prompt; skipped if already set up) ---
 schtasks /Query /TN "ClaudeCapsBlink" 2>$null | Out-Null
 if ($LASTEXITCODE -ne 0) {

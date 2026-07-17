@@ -250,6 +250,9 @@ $timer.add_Tick({
     $script:pollCounter++
     if ($script:pollCounter -ge 6) {
         $script:pollCounter = 0
+        # External stop request: tray Exit, stop-blink.cmd, or the /blink skill
+        # create this marker; exit gracefully so the LED/caps state is restored.
+        if (Test-Path $disabled) { [System.Windows.Forms.Application]::Exit(); return }
         $script:suspended = Test-Path $pausePath
         $working = $false; $attention = $false; $doneFiles = @()
         foreach ($f in @(Get-ChildItem $flagDir -Filter '*.flag')) {

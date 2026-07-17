@@ -39,9 +39,19 @@ Uninstall with `uninstall.ps1` - it removes only what install added.
 | Done | 3 quick flashes, then dark | blue flash | turn finished |
 | Idle | off (your real caps state) | gray | no active sessions |
 
-Right-click the tray dot (behind the taskbar `^` chevron) to enable/disable
-any of the three states, or **Exit** the app entirely (hooks stop relaunching
-it; run `start-blink.cmd` to bring it back). Preferences persist.
+## Turning it on and off
+
+The app starts automatically: hooks launch it when Claude works, and the
+scheduled task starts it at logon. Preferences persist. Ways to control it:
+
+- **Tray menu** (right-click the dot behind the taskbar `^` chevron):
+  enable/disable each of the three states, or **Exit**
+- **`stop-blink.cmd` / `start-blink.cmd`**: manual off/on from Explorer
+- **Ask Claude**: the installer adds a `/blink` skill, so "turn the blinker
+  off" in any Claude Code session works
+
+While stopped (Exit or stop), hooks won't relaunch it - but the logon task
+brings it back at your next sign-in, so a stop lasts until then.
 
 ## Permissions
 
